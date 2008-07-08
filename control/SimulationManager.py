@@ -20,7 +20,6 @@ class SimulationManager(object):
 		self.dt_exp = dt_exp
 		self.lastTPoint = nSec + self.dt #Extreme of the array
 		self.tpnt = numpy.arange(0.0, self.lastTPoint, self.dt) # Numpy array, with start, end and increment
-		print self.lastTPoint, self.tpnt.shape, nSec, dt_exp
 		self.nTPoints = nSec * pow(10, abs(dt_exp)) + 1 # Number of Time Points
 		self.species = species
 		self.numMol = len(species)
