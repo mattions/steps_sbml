@@ -69,12 +69,15 @@ for r in reactions:
     kreac = smodel.Reac(r.getName(), volsys, lhs = r.getLhs(), rhs = r.getRhs())
     
     # Setting the value for The Calcium
-#    if ( len (r.getReacts()) == 0 and
-#    len(r.getProds()) == 1 and 
-#    'Ca' in r.getProds() ):
-#        r.setKReact(15)
-#        print "Reaction %s reacts: %s prods %s k: %e" % (r.getName(), r.getReacts(), 
-#                                                         r.getProds(), r.getKReact()) 
+    # This is a bloody hack untill everything is ok
+    if ( len (r.getReacts()) == 0 and
+    len(r.getProds()) == 1 and 
+    'Ca' in r.getProds() ):
+        r.setKValue(15)
+        print "Reaction %s reacts: %s prods %s k Name: %s \
+        k Value: %e" % (r.getName(), r.getReacts(), 
+                                                         r.getProds(), r.getKName(),
+                                                         r.getKValue()) 
     kreac.kcst = r.getKValue()
     print r.getName(), r.getReacts(), r.getProds(), r.getKName(), r.getKValue()
 # Destroy the reactions to free memory

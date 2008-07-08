@@ -51,6 +51,7 @@ class Interface(object):
             print "ERROR: It's supported only one compartment.  \
             Compartments in this model: %d" %len(ListOfComp)
             sys.exit(1)
+        self.__volComp = volComp
         return volComp
     
     def getSpecies(self):
@@ -127,12 +128,12 @@ class Interface(object):
             kLaw = listOfReactions[i].getKineticLaw()
             
             ## Getting the math
-            math = kLaw.getMath()
-            numc = math.getNumChildren()
-            print numc
-            if (numc > 1):
-                child = math.getLeftChild()
-                print child.getName()
+#            math = kLaw.getMath()
+#            numc = math.getNumChildren()
+#            print numc
+#            if (numc > 1):
+#                child = math.getLeftChild()
+#                print child.getName()
 #                i = 1
 #                for i in xrange(numc -1):
 #                    print math.getChild(i).getName()
