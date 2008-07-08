@@ -88,9 +88,9 @@ class Interface(object):
     def getReactions(self, mols):   
         listOfReactions = self.__model.getListOfReactions()
         reactions = []
-        for i in xrange(len(listOfReactions)):
+        for i in xrange(len(listOfReactions) ):
             r = Reaction()
-            r.setName("React_" + str(i))
+            r.setName("React_" + str(i + 1)) # +1 for consistence with SBML ordering
             
             # Reactants
             reacts = []
@@ -128,12 +128,14 @@ class Interface(object):
             kLaw = listOfReactions[i].getKineticLaw()
             
             ## Getting the math
-#            math = kLaw.getMath()
-#            numc = math.getNumChildren()
-#            print numc
-#            if (numc > 1):
-#                child = math.getLeftChild()
-#                print child.getName()
+            math = kLaw.getMath()
+            numc = math.getNumChildren()
+            print numc
+            if (numc > 1):
+                child = math.getLeftChild()
+                if (child.isOperator() == False) and (child.isNumber() == False):
+                   print child.getName()
+
 #                i = 1
 #                for i in xrange(numc -1):
 #                    print math.getChild(i).getName()
