@@ -4,6 +4,8 @@ import sys
 import io
 import control as c
 import sbmlImporter
+import steps.model as smodel
+import steps.geom.wm as swm
 
 #####
 # Usage script to run one simulation
@@ -27,7 +29,7 @@ dt_exp = int(sys.argv[2])
 ############
 
 # Setting the kinetic simulation
-import steps.model as smodel
+
 mdl = smodel.Model()
 
 ############ 
@@ -35,7 +37,7 @@ mdl = smodel.Model()
 
 
 # setting the geometry
-import steps.geom.wm as swm
+
 mesh = swm.Geom()
 comp = swm.Comp('comp', mesh)
 comp.addVolsys('vsys')
@@ -89,17 +91,12 @@ r.initialize(23412)
 
 import steps.wmdirect as swmdirect
 
-sim = swmdirect.Solver(mdl, mesh, r)
 
-###########
-## Simulation
+
+######
+# Wrapping the sim object in the number of iteration
 
 iterations = 1
-simMan = c.SimulationManager(nSec, dt_exp, species, iterations)
-#simMan.baseLine(sim)
-
-### Creating the input
-#inputTimePoint = inputTime * pow(10, abs(sel.dt_exp)) # Inpute time
 
 input1 = c.Input(250001, 'Ca', 2300)
 input2 = c.Input(300001, 'Ca', 2300)
@@ -113,12 +110,27 @@ input6 = c.Input(400001, 'cAMP', 4000)
 #inputs = [input1, input2, input3, input4, input5, input6]
 inputs = [input6]
 
-simMan.inputsIn(sim, inputs)
+# Directory where to store the simulation
+currentDir = io.loader.createDir()
 
+simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir)
 
+myThreads = []
+# We need to create a sim object for each iteration
+for it in xrange (iterations):
+    
+    sim = swmdirect.Solver(mdl, mesh, r)
+    iter = simMan.inputsIn(sim, inputs, it)
+    myThreads.append(iter)
+    iter.start()
+    
+for t in myThreads:
+    t.join()
+    
+io.loader.saveCommon(currentDir, simMan.tpnt, simMan.legendDict, species, iterations)
 ### Write some interesting value for the simulation
-dir = simMan.currentDir
-fInfo = open(dir + "/info.txt", 'w')
+
+fInfo = open(currentDir + "/info.txt", 'w')
 fInfo.write('Simulation:\n nSec: %d\n iterations: %d\n'  %(nSec, iterations))
 for inp in inputs:
     inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint(), 
@@ -127,4 +139,5 @@ for inp in inputs:
     fInfo.write(inputInfo)
 fInfo.close()
 
+print "Simulation Ended. Path to Simulation Files %s" %simMan.currentDir
 print "Cookies ready."

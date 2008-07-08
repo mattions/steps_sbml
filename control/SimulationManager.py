@@ -1,6 +1,10 @@
 import numpy
 import io
 from Input import *
+from Iteration import *
+import os
+import thread
+import copy
 
 class SimulationManager(object):
 	"""
@@ -9,20 +13,28 @@ class SimulationManager(object):
 	
 
 	
-	def __init__(self, nSec, dt_exp, species, iterations):
+	def __init__(self, nSec, dt_exp, species, iterations, currentDir):
 			
 		self.nSec = nSec
 		self.dt = pow(10, dt_exp)
 		self.dt_exp = dt_exp
 		self.lastTPoint = nSec + self.dt #Extreme of the array
 		self.tpnt = numpy.arange(0.0, self.lastTPoint, self.dt) # Numpy array, with start, end and increment
+		print self.lastTPoint, self.tpnt.shape, nSec, dt_exp
 		self.nTPoints = nSec * pow(10, abs(dt_exp)) + 1 # Number of Time Points
-		self.__species = species
+		self.species = species
 		self.numMol = len(species)
-		self.__iterations = iterations # Number iterations
-		self.res = numpy.zeros([self.__iterations, self.nTPoints, self.numMol])
+		self.iterations = iterations # Number iterations
+		self.createRes(iterations)
+#		self.res = numpy.zeros([self.__iterations, self.nTPoints, self.numMol])
 		self.legendDict = {} # Map the Id of the specie with the number
+		self.currentDir = currentDir
 
+		
+	def createRes(self, iterations):
+		for i in xrange (iterations):
+			resName = "res_" + str(i) 
+			self.resName = numpy.zeros([self.nTPoints, self.numMol])
 		
 	def instantSec(self, t, it):
 		if (t % (pow(10, abs(self.dt_exp))) == 0):
@@ -30,7 +42,7 @@ class SimulationManager(object):
 				print "iteration %d sec %f" %(it, instantSec)
 				
 	
-	def run(self, sim, tp1, tp2, inputToApply, it):
+	def run(self, sim, tp1, tp2, inputToApply, it, resName):
 		"""
 			Function to run the simulation from one point to another one
 			:params:
@@ -53,7 +65,7 @@ class SimulationManager(object):
 			  						sim.getCompCount('comp', mol) + q)
 			i = 0
 			for specie in self.__species:
-				self.res[it,t,i] = sim.getCompCount('comp', specie)
+				self.resName[t,i] = sim.getCompCount('comp', specie)
 				self.legendDict[specie] = i
 				i = i + 1
 			sim.run(self.tpnt[t])
@@ -77,7 +89,7 @@ class SimulationManager(object):
 		
 		self.run(sim, 0, self.nTPoints, None) ## No input To Apply
 			  
-	def iteration(self, sim, tStart, tStop, inputs, it):
+	def iteration(self, sim, tStart, tStop, inputs, it, resName):
 		# We need to reset the simulator
 		sim.reset()		
 		
@@ -94,7 +106,16 @@ class SimulationManager(object):
 		
 		# Ordering the input
 		inputToApply = self.orderInput(inputs)
-		self.run(sim, tStart, tStop, inputToApply, it)
+		self.run(sim, tStart, tStop, inputToApply, it, resName)
+		
+		#Save the result
+		if (it == 0):
+			io.loader.saveCommon(self.currentDir, self.tpnt, self.legendDict, 
+						   self.__species, self.iterations)
+			
+		io.loader.saveRes(self.currentDir, self.resName, resName)
+#		io.loader.saveAll(self.currentDir, self.res, self.tpnt, self.legendDict, 
+#						   self.__species)
 	
 	def orderInput(self, inputs):
 				# Ordering the input
@@ -116,7 +137,7 @@ class SimulationManager(object):
 		
 		return inputToApply
 	
-	def inputsIn(self, sim, inputs):
+	def inputsIn(self, sim, inputs, it):
 		"""
 			Simulate a Base Line
 			:params:
@@ -126,14 +147,10 @@ class SimulationManager(object):
 					List of Inputs to give during the simulation
 		"""
 		
-		# Taking the inputs
-#		# Ordering the input
+
 		
-		for it in xrange(self.__iterations):
-			self.iteration(sim, 0, self.nTPoints, inputs, it)
-		
-				## Save the result
-		self.currentDir = io.loader.createDir()
-		io.loader.saveAll(self.currentDir, self.res, self.tpnt, self.legendDict, 
-						   self.__species)
-		print "Simulation Ended. Path to Simulation Files %s" %self.currentDir
+#			self.iteration(sim, 0, self.nTPoints, inputs, it, resName, self.__species)
+			
+		iter = Iteration(sim, 0, self.nTPoints, inputs, self.species, self.tpnt, self.nTPoints,
+				  self.legendDict, self.dt_exp, self.currentDir, it)
+		return iter

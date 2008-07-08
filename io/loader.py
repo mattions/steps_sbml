@@ -27,24 +27,22 @@ import os
 import datetime
 
 # Variable for the name
-resName = '/res'
 tName = '/timepoints'
 lName = '/legendDict'
 sName = '/spec_conc'
+itName = '/iterations'
 
 # dir
 today = datetime.date.today()
 dir_date = "Sims/%s" %today
 
 
-def saveAll(dir, res, tpnt, legendDict, species):
+def saveCommon(dir, tpnt, legendDict, species, iterations):
     """
         Save all the res array, the timepoints, the legendDict and the spec_con
         :param:
             dir
                 The directory where to nest the Simulation directory.
-            res
-                The result array
             timepoints
                 The timepoints
             legendDict
@@ -55,21 +53,29 @@ def saveAll(dir, res, tpnt, legendDict, species):
                 initial concentration
     """
     
-    FILE_RES = open(dir + resName, 'w')
     FILE_TPOINTS = open(dir + tName, 'w')
     FILE_LEGEND = open(dir + lName,'w')
     FILE_SPEC_CONC = open(dir + sName, 'w')
-    
-    cPickle.dump(res, FILE_RES, 1)
+    FILE_IT = open(dir + itName, 'w')
+
     cPickle.dump(tpnt, FILE_TPOINTS, 1)
     cPickle.dump(legendDict, FILE_LEGEND, 1)
     cPickle.dump(species, FILE_SPEC_CONC, 1)
+    cPickle.dump(iterations, FILE_IT, 1)
     
-    FILE_RES.close()
     FILE_TPOINTS.close()
     FILE_LEGEND.close()
     FILE_SPEC_CONC.close()
+    FILE_IT.close()
 
+def saveRes(dir, res, resName):
+    print "Saving result for %s" %resName
+    
+    FILE_RES = open(dir + "/" + resName, 'w')
+    cPickle.dump(res, FILE_RES, 1)
+    FILE_RES.close()
+    
+    
 def createDir():
     """
         Create the directory where to put the simulation
@@ -86,17 +92,24 @@ def createDir():
             os.makedirs(dir)
     return dir
     
-def loadRes(dir):
+def loadRes(dir, iterations):
     """
         Load the result array
         :param:
-            dir The directory of the simulation
+            dir 
+                The directory of the simulation
+            iterations
+                The iterations performed        
     """
-    FILE_RES = open(dir + resName, 'r')
-    res = cPickle.load(FILE_RES)
-    FILE_RES.close()
-    print "loaded file %s%s" %(dir, resName)
-    return res
+    results = {}
+    for i in xrange(iterations):
+        resName = "res_" + str(i)
+        FILE_RES = open(dir + "/" + resName, 'r')
+        res = cPickle.load(FILE_RES)
+        FILE_RES.close()
+        results[i] = res
+        print "loaded file %s/%s" %(dir, resName)
+    return results
 
 
 
@@ -131,8 +144,20 @@ def loadSpecConc(dir):
             dir The directory of the simulation
     """
     FILE_SPEC_CONC = open(dir + sName, 'r')
-    speciesWithInitialConc = cPickle.load(FILE_SPEC_CONC)
+    species = cPickle.load(FILE_SPEC_CONC)
     FILE_SPEC_CONC.close()
     print "loaded file %s%s" %(dir, sName)
-    return speciesWithInitialConc
+    return species
+
+def loadIterations(dir):
+    """
+        Load the iterations
+        :param:
+            dir The directory of the simulation
+    """
+    FILE_IT = open(dir + itName, 'r')
+    iterations = cPickle.load(FILE_IT)
+    FILE_IT.close()
+    print "loaded file %s%s" %(dir, itName)
+    return iterations
     

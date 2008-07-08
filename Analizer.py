@@ -20,7 +20,8 @@ if (len(sys.argv) != 2):
 
 dir = sys.argv[1]
 
-res = io.loader.loadRes(dir)
+it = io.loader.loadIterations(dir)
+results = io.loader.loadRes(dir, it)
 tpnt = io.loader.loadTimePoints(dir)
 legendDict = io.loader.loadLegendDict(dir)
 species = io.loader.loadSpecConc(dir)
@@ -32,10 +33,16 @@ for specie in species:
         speciesWithInitialConc.append(specie) 
 #print speciesWithInitialConc
 
+resList = []
+
+for k in results:
+    resList.append(results[k])
+    
+
 
 #create figs
-resMean = numpy.mean(res, 0)
-p = visual.Plotter(legendDict, res, resMean, tpnt)
+resMean = numpy.mean(resList, 0)
+p = visual.Plotter(legendDict, tpnt)
 
 def saveFig(fig, dir):
     # Directory to save the plots
@@ -54,7 +61,7 @@ p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
 p.plotMols(['Ca', 'PP2B', 'PP2Binactive', 'PP2BinactiveCa2'], resMean)
 saveFig('interestingSpecies.png', dir)
 p.plotMol('Ca',  resMean)
-saveFig('Calcium.png', dir)
+#saveFig('Calcium.png', dir)
 
 #for specie in legendDict:
 #    p.plotMol(res,tpnt, specie, legendDict)
