@@ -128,15 +128,15 @@ class Interface(object):
             kLaw = listOfReactions[i].getKineticLaw()
             
             ## Getting the math
-#            math = kLaw.getMath()
-#            numc = math.getNumChildren()
-#            print numc
-#            if (numc > 1):
-#                child = math.getLeftChild()
-#                print child.getName()
-#                i = 1
-#                for i in xrange(numc -1):
-#                    print math.getChild(i).getName()
+            math = kLaw.getMath()
+            numc = math.getNumChildren()
+            print numc
+            if (numc > 1):
+                child = math.getLeftChild()
+                print child.getName()
+                i = 1
+                for i in xrange(numc -1):
+                    print math.getChild(i).getName()
             
             parameters = kLaw.getListOfParameters()
             for p in parameters:
