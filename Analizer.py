@@ -41,8 +41,8 @@ for k in results:
 
 
 #create figs
-
-p = visual.Plotter(legendDict, tpnt)
+vol = pow (10,-15) ## for tonight only...
+p = visual.Plotter(legendDict, tpnt, vol)
 
 resMean = p.calcMean(resList)
 
@@ -60,8 +60,8 @@ def saveFig(fig, dir):
     
 p.create_graph(speciesWithInitialConc, resMean)
 p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
-p.plotMols(['Ca', 'PP2B', 'PP2Binactive', 'PP2BinactiveCa2'], resMean)
 saveFig('interestingSpecies.png', dir)
+p.plotMols(['Ca', 'PP2B', 'PP2Binactive', 'PP2BinactiveCa2'], resMean)
 p.plotMol('Ca',  resMean)
 #saveFig('Calcium.png', dir)
 
