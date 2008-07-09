@@ -1,4 +1,5 @@
 from pylab import *
+import numpy
 
 
 class Plotter(object):
@@ -72,3 +73,19 @@ class Plotter(object):
         xlabel('Time (sec)')
         ylabel('#molecules')
         title ("iteration plotted " + str(len(resList)))
+        
+    def calcMean(self, resList):
+        """
+        Return the mean of a list of array
+        
+        :Parameters:
+            resList
+                List of array of which we have to calculate the mean
+                
+        """
+        s = resList[0].shape
+        resMean = numpy.zeros(s)
+        for i in xrange(len(resList)) :
+            resMean += resList[i]
+        resMean /= len(resList)
+        return resMean

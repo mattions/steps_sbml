@@ -41,8 +41,10 @@ for k in results:
 
 
 #create figs
-resMean = numpy.mean(resList, 0)
+
 p = visual.Plotter(legendDict, tpnt)
+
+resMean = p.calcMean(resList)
 
 def saveFig(fig, dir):
     # Directory to save the plots
