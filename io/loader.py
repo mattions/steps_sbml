@@ -104,11 +104,14 @@ def loadRes(dir, iterations):
     results = {}
     for i in xrange(iterations):
         resName = "res_" + str(i)
-        FILE_RES = open(dir + "/" + resName, 'r')
-        res = cPickle.load(FILE_RES)
-        FILE_RES.close()
-        results[i] = res
-        print "loaded file %s/%s" %(dir, resName)
+        try:
+            FILE_RES = open(dir + "/" + resName, 'r')
+            res = cPickle.load(FILE_RES)
+            FILE_RES.close()
+            results[i] = res
+            print "loaded file %s/%s" %(dir, resName)
+        except:
+            print "Impossible to load file %s/%s\t Skipped." %(dir, resName)
     return results
 
 
