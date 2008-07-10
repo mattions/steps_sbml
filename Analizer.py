@@ -10,15 +10,24 @@ print sys.argv
 def usage():
     print "Provide me the path to the file to analyze"
     print "Analyzer.py Sims/Sim_# with # Number of the simulation"
+    print "Analyzer.py Sims/Sim_# True will run in batch mode"
 
-if (len(sys.argv) != 2):
+dir = ''
+savePlot = False
+if (len(sys.argv) == 2):
+    dir = sys.argv[1]
+
+elif(len(sys.argv) == 3):
+    dir = sys.argv[1]
+    savePlot = sys.argv[2]
+    
+else:
     usage()
     exit() ## It will die if run on ipython
     sys.exit(1) 
     
-    
 
-dir = sys.argv[1]
+
 storage = io.loader.loadStorage(dir)
 
 #Unpacking the storage
@@ -45,7 +54,7 @@ for k in results:
 
 #create figs
 
-p = visual.Plotter(legendDict, tpnt, vol)
+p = visual.Plotter(legendDict, tpnt, vol, dir)
 
 resMean = p.calcMean(resList)
 
@@ -60,12 +69,13 @@ def saveFig(fig, dir):
     if (not os.path.exists(pathFig)):
         savefig(pathFig)
         print "Figure saved in %s" %(pathFig)
-    
-p.create_graph(speciesWithInitialConc, resMean)
-p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
-saveFig('interestingSpecies.png', dir)
-p.plotMols(['Ca', 'PP2B', 'PP2Binactive', 'PP2BinactiveCa2'], resMean)
-p.plotMol('Ca',  resMean)
+
+
+#p.create_graph(speciesWithInitialConc, resMean, savePlot)
+p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean, savePlot)
+p.plotMols(['Ca', 'PP2B', 'PP2Binactive', 'PP2BinactiveCa2'], resMean, savePlot)
+p.plotMols(['Ca'],  resMean, savePlot)
+p.plotMolIt('D', resList, savePlot)
 #saveFig('Calcium.png', dir)
 
 #for specie in legendDict:

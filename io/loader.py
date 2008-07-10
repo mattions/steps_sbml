@@ -33,19 +33,6 @@ stoName = '/storage'
 today = datetime.date.today()
 dir_date = "Sims/%s" %today
 
-def saveStorage(dir, storage):
-    """
-    Save the storage object in the directory provided
-    
-    :Params:
-        dir 
-            Directory where to save the object
-        storage
-            The object to save
-    """
-    FILE = open(dir + "/" + stoName, 'w')
-    cPickle.dump(storage, FILE, 1)
-    FILE.close()
     
 def createDir():
     """
@@ -85,6 +72,13 @@ def loadRes(dir, iterations):
             print "Impossible to load file %s/%s\t Skipped." %(dir, resName)
     return results
 
+def saveRes(dir, res, resName):
+    print "Saving result for %s" %resName
+    
+    FILE_RES = open(dir + "/" + resName, 'w')
+    cPickle.dump(res, FILE_RES, 1)
+    FILE_RES.close()
+    
 
 def loadStorage(dir):
 
@@ -93,3 +87,17 @@ def loadStorage(dir):
     FILE.close()
     print "loaded file %s%s" %(dir, stoName)
     return storage
+
+def saveStorage(dir, storage):
+    """
+    Save the storage object in the directory provided
+    
+    :Params:
+        dir 
+            Directory where to save the object
+        storage
+            The object to save
+    """
+    FILE = open(dir + "/" + stoName, 'w')
+    cPickle.dump(storage, FILE, 1)
+    FILE.close()
