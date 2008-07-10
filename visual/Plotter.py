@@ -67,7 +67,7 @@ class Plotter(object):
         title (mol)
         show()
         
-    def plotMolIt(self, mol, resList):
+    def plotMolIt(self, mol, resList, conc = False):
         """
             Plot a molecule in a set of iterations
             :parameters:
@@ -87,7 +87,7 @@ class Plotter(object):
                 ylabel('#molecules')
         legend((mol,))
         xlabel('Time (sec)')
-        title ("iteration plotted " + str(len(resList)))
+        title ("iterations plotted: " + str(len(resList)))
         
     def calcMean(self, resList):
         """

@@ -96,7 +96,7 @@ import steps.wmdirect as swmdirect
 ######
 # Wrapping the sim object in the number of iteration
 
-iterations = 5
+iterations = 1
 
 input1 = c.Input(490001, 'Ca', 2300)
 input2 = c.Input(480001, 'Ca', 2300)
@@ -140,8 +140,10 @@ for it in xrange (iterations):
 for t in myThreads:
     t.join()
     
-    
-io.loader.saveCommon(currentDir, simMan.tpnt, simMan.legendDict, species, iterations)
+storage = io.Storage(currentDir, simMan.tpnt, simMan.legendDict, species, 
+                     iterations, volComp)
+io.loader.saveStorage(currentDir, storage)    
+#io.loader.saveCommon(currentDir, simMan.tpnt, simMan.legendDict, species, iterations)
 ### Write some interesting value for the simulation
 
 fInfo = open(currentDir + "/info.txt", 'w')

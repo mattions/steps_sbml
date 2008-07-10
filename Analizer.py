@@ -19,12 +19,15 @@ if (len(sys.argv) != 2):
     
 
 dir = sys.argv[1]
+storage = io.loader.loadStorage(dir)
 
-it = io.loader.loadIterations(dir)
+#Unpacking the storage
+it = storage.getIterations() 
 results = io.loader.loadRes(dir, it)
-tpnt = io.loader.loadTimePoints(dir)
-legendDict = io.loader.loadLegendDict(dir)
-species = io.loader.loadSpecConc(dir)
+tpnt = storage.getTpnt()
+legendDict = storage.getLegendDict()
+species = storage.getSpecies()
+vol = storage.getVol()
 
 speciesWithInitialConc = [] # Only the specs with init conc != 0
 
@@ -41,7 +44,7 @@ for k in results:
 
 
 #create figs
-vol = pow (10,-15) ## for tonight only...
+
 p = visual.Plotter(legendDict, tpnt, vol)
 
 resMean = p.calcMean(resList)
