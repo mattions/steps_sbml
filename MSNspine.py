@@ -110,7 +110,7 @@ simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir)
 #input5 = c.Input(450001, 'Ca', 2300)
 
 inputCa = []
-secOfInput = 10
+secOfInput = 450
 duration = 2
 for i in xrange(10):    
     if i == 0:
