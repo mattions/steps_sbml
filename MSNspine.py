@@ -98,24 +98,42 @@ import steps.wmdirect as swmdirect
 
 iterations = 1
 
-input1 = c.Input(490001, 'Ca', 2300)
-input2 = c.Input(480001, 'Ca', 2300)
-input3 = c.Input(470001, 'Ca', 2300)
-input4 = c.Input(460001, 'Ca', 2300)
-input5 = c.Input(450001, 'Ca', 2300)
+# Directory where to store the simulation
+currentDir = io.loader.createDir()
+
+simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir)
+
+#input1 = c.Input(490001, 'Ca', 2300)
+#input2 = c.Input(480001, 'Ca', 2300)
+#input3 = c.Input(470001, 'Ca', 2300)
+#input4 = c.Input(460001, 'Ca', 2300)
+#input5 = c.Input(450001, 'Ca', 2300)
 
 inputCa = []
-startTime = 450001
+secOfInput = 10
+duration = 2
 for i in xrange(10):    
     if i == 0:
-        input = c.Input(startTime, 'Ca', 2300)
+        for j in xrange(duration):
+            inputTime = (secOfInput + j) * simMan.timePointIncrement
+            input = c.Input(inputTime, 'Ca', 2300)
+            print "Input in at sec %f with dt time point %f" %(secOfInput + j, 
+                                                                    simMan.dt)
+            print "InputTime point: %f" %inputTime
+            inputCa.append(input)
     else:
-        startTime += 2000
-        input = c.Input(startTime, 'Ca', 2300)
-        
-    inputCa.append(input)
+        delay = 2
+        secOfInput += delay 
+        for j in xrange(duration):
+            inputTime = (secOfInput + j) * simMan.timePointIncrement
+            input = c.Input(inputTime, 'Ca', 2300)
+            print "Input in at sec %f with dt time point %f" %(secOfInput + j, 
+                                                                    simMan.dt)
+            print "InputTime point: %f" %inputTime
+            inputCa.append(input)
 
-input6 = c.Input(400001, 'cAMP', 4000)
+
+input6 = c.Input(400 * simMan.timePointIncrement , 'cAMP', 4000)
 
 #inputs = [] # Steady State
 #inputs = [input1, input2, input3, input4, input5]
@@ -123,10 +141,7 @@ input6 = c.Input(400001, 'cAMP', 4000)
 inputs = [input6]
 inputs.extend(inputCa)
 
-# Directory where to store the simulation
-currentDir = io.loader.createDir()
 
-simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir)
 
 myThreads = []
 # We need to create a sim object for each iteration

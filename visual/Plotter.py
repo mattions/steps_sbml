@@ -18,28 +18,20 @@ class Plotter(object):
         self.__vol = vol
 
     
-#    def create_graph(self, speciesWithInitialConc, res):
-#        """
-#            Create a graph with all the Species
-#        """
-#        figure()
-#        speciesToPlot = list(self.speciesFromUser)
-#        speciesToPlot += speciesWithInitialConc
-#        ## Delete duplicates
-#        speciesToPlot = set(speciesToPlot)
-#        for specie in self.__legendDict:
-#            if (speciesToPlot.__contains__(specie) ):
-#               plot(self.__tpnt, res[:,self.__legendDict[specie]])
-#    
-#        #legend(speciesToPlot)
-#        xlabel('Time (sec)')
-#        ylabel('#molecules')
-#        title (speciesWithInitialConc)
-#        show()
-        
     def plotMols(self, mols, res, conc = False, batch = False):
-        if batch is True:
-            show(false)
+        """
+        Plot the number of all the molecules provided as list on the same graph. 
+        
+        :Parameters:
+            mols
+                The list of molecules
+            res
+                The array woth the concentration of each molecules
+            conc
+                If true the conc of the molecule will be plotted (default: False)
+            batch
+                It will save the graph to a directory instead of showing. (default: False)
+        """
         figure()
         for mol in mols:
             if conc is True:
@@ -52,23 +44,10 @@ class Plotter(object):
         xlabel('Time (sec)')
         title(mols)
         self.saveFig(str(mols) + ".png")
-        
-#    def plotMol(self, mol, res, conc = False, batch = False):
-#        """
-#            Plot only Calcium
-#        """
-#        if batch is True:
-#            show(false)
-#        figure()
-#        if conc is True:
-#            plot(self.__tpnt, self.calcConc(res[:,self.__legendDict[mol]]))
-#            ylabel('#concentrations')
-#        else:
-#            plot(self.__tpnt, res[:,self.__legendDict[mol]])
-#            ylabel('#molecules')
-#        legend((mol,))
-#        xlabel('Time (sec)')
-#        title (mol)
+        if batch is True:
+            show(False)
+        else:
+            show(True)
         
     def plotMolIt(self, mol, resList, conc = False, batch = False):
         """
@@ -78,10 +57,13 @@ class Plotter(object):
                     The molecule to plot
                 resList
                     The list of the result array to plot
+                conc
+                    If true the conc of the molecule will be plotted 
+                    (default: False)
+                batch
+                    It will save the graph to a directory instead of showing. 
+                    (default: False)
         """
-        
-        if batch is True:
-            show(false)
         figure()
         for res in resList:
             if conc is True:
@@ -95,15 +77,22 @@ class Plotter(object):
         it = len(resList)
         title ("iterations plotted: " + str(it))
         self.saveFig(str(mol) + "_it_" + str(it) + ".png")
+        if batch is True:
+            show(False)
+        else:
+            show(True)
                 
-    def saveFig(self, fig):
+    def saveFig(self, figName):
+        """
+        Save the figure in the Plots directory
+        """
         # Directory to save the plots
         plotDir = "%s/plots" %self.__dir
     
         if (not os.path.exists(plotDir)):
             os.mkdir(plotDir)
             
-        pathFig = "%s/%s" %(plotDir, fig)
+        pathFig = "%s/%s" %(plotDir, figName)
         if (not os.path.exists(pathFig)):
             savefig(pathFig)
         print "Figure saved in %s" %(pathFig)
