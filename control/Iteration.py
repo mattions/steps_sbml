@@ -15,11 +15,20 @@ class Iteration(threading.Thread):
         self.nTPoints = nTPoints
         self.legendDict = legendDict
         self.dt_exp = dt_exp
+        self.timePointIncrement = pow(10, abs(dt_exp))
         self.currentDir = currentDir
         self.resName = "res_" + str(it)
         threading.Thread.__init__ ( self )
 
     def orderInput(self, inputs):
+        """
+        Order the input to apply according to the sec of input.
+        Return a dictionay of ordered input of the structure:
+        timepoint --> list of input to apply in that inputTime
+        :Parameters:
+            inputs
+                List of Input 
+        """
                 # Ordering the input
         inputToApply = {}
         
@@ -33,21 +42,30 @@ class Iteration(threading.Thread):
                 inputToApply[timePoint] = [input]        
         return inputToApply
     
-    def instantSec(self, t):
-        if (t % (pow(10, abs(self.dt_exp))) == 0):
-            instantSec = t / pow(10, abs(self.dt_exp))
+    def instantSec(self, t, interval):
+        """
+        Report the status of the simulation according to the interval
+        :Params:
+            t 
+                The timepoint
+            interval
+                the interval of the report
+            
+        """
+        if (t % (interval * self.timePointIncrement) == 0):
+            instantSec = t / self.timePointIncrement
             print "iteration %s sec %f" %(self.resName, instantSec)
     
     def runTime(self, inputToApply):
         """
-            Function to run the simulation from one point to another one
-            :params:
-                sim
-                    The simulator variable of STEPS
-                tp1
-                    Time point where to start the simulation (ex.: 0)
-                tp2
-                    Time where to stop the simulation (ex.: 3001)
+        Function to run the simulation from one point to another one
+        :params:
+            sim
+                The simulator variable of STEPS
+            tp1
+                Time point where to start the simulation (ex.: 0)
+            tp2
+                Time where to stop the simulation (ex.: 3001)
         """
 #        print inputToApply
         res = numpy.zeros([self.nTPoints, len(self.species)])
@@ -66,7 +84,8 @@ class Iteration(threading.Thread):
                 self.legendDict[specie] = i
                 i = i + 1
             self.sim.run(self.tpnt[t])
-            self.instantSec(t)
+            interval = 10
+            self.instantSec(t, interval)
         return res
     
     def run (self):
@@ -81,7 +100,7 @@ class Iteration(threading.Thread):
         inputToApply = self.orderInput(self.inputs)
         
         res = self.runTime(inputToApply)
+        
         #Save the result
-            
         io.loader.saveRes(self.currentDir, res, self.resName)
         

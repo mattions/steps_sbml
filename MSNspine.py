@@ -110,7 +110,7 @@ import steps.wmdirect as swmdirect
 ######
 # Wrapping the sim object in the number of iteration
 
-iterations = 1
+iterations = 2
 
 # Directory where to store the simulation
 currentDir = io.loader.createDir()
