@@ -13,7 +13,7 @@ class SimulationManager(object):
 	
 
 	
-	def __init__(self, nSec, dt_exp, species, iterations, currentDir):
+	def __init__(self, nSec, dt_exp, species, iterations, currentDir, interval):
 			
 		self.nSec = nSec
 		self.dt = pow(10, dt_exp)
@@ -29,6 +29,7 @@ class SimulationManager(object):
 #		self.res = numpy.zeros([self.__iterations, self.nTPoints, self.numMol])
 		self.legendDict = {} # Map the Id of the specie with the number
 		self.currentDir = currentDir
+		self.interval = interval
 
 		
 	def createRes(self, iterations):
@@ -50,5 +51,5 @@ class SimulationManager(object):
 		"""
 			
 		iter = Iteration(sim, 0, self.nTPoints, inputs, self.species, self.tpnt, self.nTPoints,
-				  self.legendDict, self.dt_exp, self.currentDir, it)
+				  self.legendDict, self.dt_exp, self.currentDir, it, self.interval)
 		return iter

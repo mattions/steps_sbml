@@ -5,7 +5,7 @@ import numpy
 class Iteration(threading.Thread):
     
     def __init__ (self, sim, tStart, tStop, inputs, species, tpnt, nTPoints,
-                  legendDict, dt_exp, currentDir, it):
+                  legendDict, dt_exp, currentDir, it, interval):
         self.sim = sim
         self.tStart = tStart
         self.tStop = tStop
@@ -18,6 +18,7 @@ class Iteration(threading.Thread):
         self.timePointIncrement = pow(10, abs(dt_exp))
         self.currentDir = currentDir
         self.resName = "res_" + str(it)
+        self.interval = interval
         threading.Thread.__init__ ( self )
 
     def orderInput(self, inputs):
@@ -42,17 +43,14 @@ class Iteration(threading.Thread):
                 inputToApply[timePoint] = [input]        
         return inputToApply
     
-    def instantSec(self, t, interval):
+    def instantSec(self, t):
         """
         Report the status of the simulation according to the interval
         :Params:
             t 
                 The timepoint
-            interval
-                the interval of the report
-            
         """
-        if (t % (interval * self.timePointIncrement) == 0):
+        if (t % (self.interval * self.timePointIncrement) == 0):
             instantSec = t / self.timePointIncrement
             print "iteration %s sec %f" %(self.resName, instantSec)
     
@@ -73,9 +71,9 @@ class Iteration(threading.Thread):
             if (inputToApply is not None and t in inputToApply):
                 inputList = inputToApply.pop(t)
                 for inp in inputList:
-                     print inp, t
                      mol = inp.getMol()
                      q = inp.getQuantity()
+                     print "Input applied: Mol %s, Quantity %e, time %d" %(mol, q, t) 
                      self.sim.setCompCount('comp', mol, 
                                       self.sim.getCompCount('comp', mol) + q)
             i = 0 
@@ -84,8 +82,7 @@ class Iteration(threading.Thread):
                 self.legendDict[specie] = i
                 i = i + 1
             self.sim.run(self.tpnt[t])
-            interval = 10
-            self.instantSec(t, interval)
+            self.instantSec(t)
         return res
     
     def run (self):

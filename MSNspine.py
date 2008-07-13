@@ -110,13 +110,14 @@ import steps.wmdirect as swmdirect
 ######
 # Wrapping the sim object in the number of iteration
 
-iterations = 2
+iterations = 10
 
 # Directory where to store the simulation
 currentDir = io.loader.createDir()
+interval = 100 #(Time of updating)
+simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval)
 
-simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir)
-print simMan
+
 #input1 = c.Input(490001, 'Ca', 2300)
 #input2 = c.Input(480001, 'Ca', 2300)
 #input3 = c.Input(470001, 'Ca', 2300)
