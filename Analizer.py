@@ -1,10 +1,9 @@
 import sys
 import cPickle
-from pylab import *
-import visual
 import io
 import numpy
 import os
+
 
 print sys.argv
 def usage():
@@ -13,20 +12,27 @@ def usage():
     print "Analyzer.py Sims/Sim_# True will run in batch mode"
 
 dir = ''
-savePlot = False
+batch = False
 if (len(sys.argv) == 2):
     dir = sys.argv[1]
 
 elif(len(sys.argv) == 3):
     dir = sys.argv[1]
-    savePlot = sys.argv[2]
+    batch = sys.argv[2]
     
 else:
     usage()
     exit() ## It will die if run on ipython
     sys.exit(1) 
     
+## Setting the backend
+import matplotlib
+if batch:
+    matplotlib.use('Cairo')
+    print "Switching backend to Cairo. Batch execution"
+from pylab import *
 
+import visual
 
 storage = io.loader.loadStorage(dir)
 
@@ -58,21 +64,12 @@ p = visual.Plotter(legendDict, tpnt, vol, dir)
 
 resMean = p.calcMean(resList)
 
-def saveFig(fig, dir):
-    # Directory to save the plots
-    plotDir = "%s/plots" %dir
+p.plotMols(['Ca'],  resMean)
+p.plotMolIt('D', resList)
+p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
+if not batch:
+    show()
 
-    if (not os.path.exists(plotDir)):
-        os.mkdir(plotDir)
-        
-    pathFig = "%s/%s" %(plotDir, fig)
-    if (not os.path.exists(pathFig)):
-        savefig(pathFig)
-        print "Figure saved in %s" %(pathFig)
-
-p.plotMols(['Ca'],  resMean, savePlot)
-p.plotMolIt('D', resList, savePlot)
-p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean, savePlot)
 #saveFig('Calcium.png', dir)
 
 #for specie in legendDict:

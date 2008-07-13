@@ -18,7 +18,7 @@ class Plotter(object):
         self.__vol = vol
 
     
-    def plotMols(self, mols, res, conc = False, batch = False):
+    def plotMols(self, mols, res, conc = False):
         """
         Plot the number of all the molecules provided as list on the same graph. 
         
@@ -44,12 +44,9 @@ class Plotter(object):
         xlabel('Time (sec)')
         title(mols)
         self.saveFig(str(mols) + ".png")
-        if batch is True:
-            show(False)
-        else:
-            show(True)
+
         
-    def plotMolIt(self, mol, resList, conc = False, batch = False):
+    def plotMolIt(self, mol, resList, conc = False):
         """
             Plot a molecule in a set of iterations
             :parameters:
@@ -77,10 +74,7 @@ class Plotter(object):
         it = len(resList)
         title ("iterations plotted: " + str(it))
         self.saveFig(str(mol) + "_it_" + str(it) + ".png")
-        if batch is True:
-            show(False)
-        else:
-            show(True)
+
                 
     def saveFig(self, figName):
         """
@@ -94,8 +88,8 @@ class Plotter(object):
             
         pathFig = "%s/%s" %(plotDir, figName)
         if (not os.path.exists(pathFig)):
-            savefig(pathFig)
-        print "Figure saved in %s" %(pathFig)
+            savefig(pathFig, dpi='300')
+            print "Figure saved in %s" %(pathFig)
         
     def calcMean(self, resList):
         """
