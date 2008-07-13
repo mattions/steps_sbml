@@ -37,9 +37,10 @@ class SimulationManager(object):
 			self.resName = numpy.zeros([self.nTPoints, self.numMol])
 		
 	def instantSec(self, t, it):
-		if (t % (pow(10, abs(self.dt_exp))) == 0):
+		if (t % (5 * sim.timePointIncrement) == 0):
 			   	instantSec = t / pow(10, abs(self.dt_exp))
-				print "iteration %d sec %f" %(it, instantSec)
+				print "iteration %d sec %f timepoint %d division %f" %(it, instantSec, 
+																	   t, t % (10 * sim.timePointIncrement))
 				
 	
 	def run(self, sim, tp1, tp2, inputToApply, it, resName):
@@ -107,6 +108,7 @@ class SimulationManager(object):
 		# Ordering the input
 		inputToApply = self.orderInput(inputs)
 		self.run(sim, tStart, tStop, inputToApply, it, resName)
+		
 		
 		#Save the result
 		if (it == 0):

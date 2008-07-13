@@ -70,7 +70,20 @@ for r in reactions:
     # Adding the reactions
     kreac = smodel.Reac(r.getName(), volsys, lhs = r.getLhs(), rhs = r.getRhs())
     
-    # Setting the value for The Calcium
+
+    # Hack for the k to get the Volume right
+    # EXPERIMENTAL -- HAS TO BE DONE WITH THE MATH
+    
+    if (len(r.getReacts()) < 1) :
+        oldK =  r.getKValue()
+        newK = r.getKValue() * volComp
+        r.setKValue(newK)
+        print "Reaction %s reacts: %s prods %s k Name: %s \
+        k NEW Value: %e k OLD Value: %e" % (r.getName(), r.getReacts(), 
+                                                         r.getProds(), r.getName(), newK,
+                                                         oldK)
+        
+            # Setting the value for The Calcium
     # This is a bloody hack untill everything is ok
     if ( len (r.getReacts()) == 0 and
     len(r.getProds()) == 1 and 
@@ -79,7 +92,8 @@ for r in reactions:
         print "Reaction %s reacts: %s prods %s k Name: %s \
         k Value: %e" % (r.getName(), r.getReacts(), 
                                                          r.getProds(), r.getKName(),
-                                                         r.getKValue()) 
+                                                         r.getKValue())
+     
     kreac.kcst = r.getKValue()
     print r.getName(), r.getReacts(), r.getProds(), r.getKName(), r.getKValue()
 # Destroy the reactions to free memory
@@ -96,13 +110,13 @@ import steps.wmdirect as swmdirect
 ######
 # Wrapping the sim object in the number of iteration
 
-iterations = 10
+iterations = 1
 
 # Directory where to store the simulation
 currentDir = io.loader.createDir()
 
 simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir)
-
+print simMan
 #input1 = c.Input(490001, 'Ca', 2300)
 #input2 = c.Input(480001, 'Ca', 2300)
 #input3 = c.Input(470001, 'Ca', 2300)

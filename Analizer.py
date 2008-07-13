@@ -70,12 +70,9 @@ def saveFig(fig, dir):
         savefig(pathFig)
         print "Figure saved in %s" %(pathFig)
 
-
-#p.create_graph(speciesWithInitialConc, resMean, savePlot)
-p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean, savePlot)
-p.plotMols(['Ca', 'PP2B', 'PP2Binactive', 'PP2BinactiveCa2'], resMean, savePlot)
 p.plotMols(['Ca'],  resMean, savePlot)
 p.plotMolIt('D', resList, savePlot)
+p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean, savePlot)
 #saveFig('Calcium.png', dir)
 
 #for specie in legendDict:
