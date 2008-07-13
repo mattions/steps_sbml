@@ -27,54 +27,12 @@ import os
 import datetime
 
 # Variable for the name
-tName = '/timepoints'
-lName = '/legendDict'
-sName = '/spec_conc'
-itName = '/iterations'
+stoName = '/storage'
 
 # dir
 today = datetime.date.today()
 dir_date = "Sims/%s" %today
 
-
-def saveCommon(dir, tpnt, legendDict, species, iterations):
-    """
-        Save all the res array, the timepoints, the legendDict and the spec_con
-        :param:
-            dir
-                The directory where to nest the Simulation directory.
-            timepoints
-                The timepoints
-            legendDict
-                The legend to map the number of the row of the result with the 
-                name of the Mol
-            species 
-                The species that has started the simulation mapped to their 
-                initial concentration
-    """
-    
-    FILE_TPOINTS = open(dir + tName, 'w')
-    FILE_LEGEND = open(dir + lName,'w')
-    FILE_SPEC_CONC = open(dir + sName, 'w')
-    FILE_IT = open(dir + itName, 'w')
-
-    cPickle.dump(tpnt, FILE_TPOINTS, 1)
-    cPickle.dump(legendDict, FILE_LEGEND, 1)
-    cPickle.dump(species, FILE_SPEC_CONC, 1)
-    cPickle.dump(iterations, FILE_IT, 1)
-    
-    FILE_TPOINTS.close()
-    FILE_LEGEND.close()
-    FILE_SPEC_CONC.close()
-    FILE_IT.close()
-
-def saveRes(dir, res, resName):
-    print "Saving result for %s" %resName
-    
-    FILE_RES = open(dir + "/" + resName, 'w')
-    cPickle.dump(res, FILE_RES, 1)
-    FILE_RES.close()
-    
     
 def createDir():
     """
@@ -114,53 +72,32 @@ def loadRes(dir, iterations):
             print "Impossible to load file %s/%s\t Skipped." %(dir, resName)
     return results
 
-
-
-def loadTimePoints(dir):
-    """
-        Load the timepoints array
-        :param:
-            dir The directory of the simulation
-    """
-    FILE_TPOINTS = open(dir + tName, 'r')
-    tpnt = cPickle.load(FILE_TPOINTS)
-    FILE_TPOINTS.close()
-    print "loaded file %s%s" %(dir, tName)
-    return tpnt
-
-def loadLegendDict(dir):
-    """
-        Load the legend Dictionary 
-        :param:
-            dir The directory of the simulation
-    """
-    FILE_LEGEND = open(dir + lName,'r')
-    legendDict = cPickle.load(FILE_LEGEND)
-    FILE_LEGEND.close()
-    print "loaded file %s%s" %(dir, lName)
-    return legendDict
+def saveRes(dir, res, resName):
+    print "Saving result for %s" %resName
     
-def loadSpecConc(dir):
-    """
-        Load the Spec conc Dictionary
-        :param:
-            dir The directory of the simulation
-    """
-    FILE_SPEC_CONC = open(dir + sName, 'r')
-    species = cPickle.load(FILE_SPEC_CONC)
-    FILE_SPEC_CONC.close()
-    print "loaded file %s%s" %(dir, sName)
-    return species
-
-def loadIterations(dir):
-    """
-        Load the iterations
-        :param:
-            dir The directory of the simulation
-    """
-    FILE_IT = open(dir + itName, 'r')
-    iterations = cPickle.load(FILE_IT)
-    FILE_IT.close()
-    print "loaded file %s%s" %(dir, itName)
-    return iterations
+    FILE_RES = open(dir + "/" + resName, 'w')
+    cPickle.dump(res, FILE_RES, 1)
+    FILE_RES.close()
     
+
+def loadStorage(dir):
+
+    FILE = open(dir + stoName, 'r')
+    storage = cPickle.load(FILE)
+    FILE.close()
+    print "loaded file %s%s" %(dir, stoName)
+    return storage
+
+def saveStorage(dir, storage):
+    """
+    Save the storage object in the directory provided
+    
+    :Params:
+        dir 
+            Directory where to save the object
+        storage
+            The object to save
+    """
+    FILE = open(dir + "/" + stoName, 'w')
+    cPickle.dump(storage, FILE, 1)
+    FILE.close()

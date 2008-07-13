@@ -20,6 +20,7 @@
 
 import libsbml
 import sys
+import os
 from Reaction import *
 
 
@@ -32,7 +33,8 @@ class Interface(object):
         if self.__document.getNumErrors() > 0 :
             pm = self.__document.getError(0)
             if pm.getErrorId() == libsbml.XMLFileUnreadable:
-                print "Sbml File %s not found or unreadable" %filename 
+                print "Sbml File %s not found or unreadable in dir %s" %(filename, 
+                                                                         os.getcwd()) 
                 sys.exit(1)
         self.__globalParameters = self.parseGlobalParameters()
             
@@ -128,15 +130,15 @@ class Interface(object):
             kLaw = listOfReactions[i].getKineticLaw()
             
             ## Getting the math
-            math = kLaw.getMath()
-            numc = math.getNumChildren()
-            print numc
-            if (numc > 1):
-                child = math.getLeftChild()
-                print child.getName()
-                i = 1
-                for i in xrange(numc -1):
-                    print math.getChild(i).getName()
+#            math = kLaw.getMath()
+#            numc = math.getNumChildren()
+#            print numc
+#            if (numc > 1):
+#                child = math.getLeftChild()
+#                print child.getName()
+#                i = 1
+#                for i in xrange(numc -1):
+#                    print math.getChild(i).getName()
             
             parameters = kLaw.getListOfParameters()
             for p in parameters:

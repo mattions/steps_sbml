@@ -20,7 +20,8 @@ class SimulationManager(object):
 		self.dt_exp = dt_exp
 		self.lastTPoint = nSec + self.dt #Extreme of the array
 		self.tpnt = numpy.arange(0.0, self.lastTPoint, self.dt) # Numpy array, with start, end and increment
-		self.nTPoints = nSec * pow(10, abs(dt_exp)) + 1 # Number of Time Points
+		self.timePointIncrement = pow(10, abs(dt_exp))
+		self.nTPoints = nSec * self.timePointIncrement + 1 # Number of Time Points
 		self.species = species
 		self.numMol = len(species)
 		self.iterations = iterations # Number iterations
@@ -36,7 +37,7 @@ class SimulationManager(object):
 			self.resName = numpy.zeros([self.nTPoints, self.numMol])
 		
 	def instantSec(self, t, it):
-		if (t % (pow(10, abs(self.dt_exp))) == 0):
+		if (t % (10 * sim.timePointIncrement) == 0):
 			   	instantSec = t / pow(10, abs(self.dt_exp))
 				print "iteration %d sec %f" %(it, instantSec)
 				
