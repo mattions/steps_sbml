@@ -114,7 +114,7 @@ iterations = 2
 
 # Directory where to store the simulation
 currentDir = io.loader.createDir()
-interval = 500 #(Time of updating)
+interval = 50 #(Time of updating)
 simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval)
 
 
@@ -177,9 +177,12 @@ io.loader.saveStorage(currentDir, storage)
 ### Write some interesting value for the simulation
 
 fInfo = open(currentDir + "/info.txt", 'w')
-fInfo.write('Simulation:\n nSec: %d\n iterations: %d\n'  %(nSec, iterations))
+fInfo.write('Simulation:\n nSec: %d\
+    \n dt: %f\
+    \n iterations: %d\n'  %(nSec, simMan.dt, iterations))
 for inp in inputs:
-    inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint(), 
+    inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint() 
+                                                      / simMan.timePointIncrement, 
                                                       inp.getMol(),
                                                       inp.getQuantity())
     fInfo.write(inputInfo)
