@@ -126,26 +126,18 @@ simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, inte
 
 inputCa = []
 secOfInput = 450
-duration = 2
+#duration = 2
 for i in xrange(10):    
-    if i == 0:
-        for j in xrange(duration):
-            inputTime = (secOfInput + j) * simMan.timePointIncrement
-            input = c.Input(inputTime, 'Ca', 3975)
-            print "Input in at sec %f with dt time point %f" %(secOfInput + j, 
-                                                                    simMan.dt)
-            print "InputTime point: %f" %inputTime
-            inputCa.append(input)
-    else:
-        delay = 2
-        secOfInput += duration + delay 
-        for j in xrange(duration):
-            inputTime = (secOfInput + j) * simMan.timePointIncrement
-            input = c.Input(inputTime, 'Ca', 3975)
-            print "Input in at sec %f with dt time point %f" %(secOfInput + j, 
-                                                                    simMan.dt)
-            print "InputTime point: %f" %inputTime
-            inputCa.append(input)
+
+    delay = 4
+#    for j in xrange(duration):
+    inputTime = secOfInput * simMan.timePointIncrement
+    input = c.Input(inputTime, 'Ca', 2300)
+    print "Input in at sec %f with dt time point %f" %(secOfInput, 
+                                                            simMan.dt)
+    inputCa.append(input)
+#    secOfInput += duration + delay
+    secOfInput += delay
 
 
 input6 = c.Input(400 * simMan.timePointIncrement , 'cAMP', 3975)
@@ -153,9 +145,9 @@ input6 = c.Input(400 * simMan.timePointIncrement , 'cAMP', 3975)
 #inputs = [] # Steady State
 #inputs = [input1, input2, input3, input4, input5]
 #inputs = [input1, input2, input3, input4, input5, input6]
-#inputs = [input6]
-#inputs.extend(inputCa)
-inputs = []
+inputs = [input6]
+inputs.extend(inputCa)
+#inputs = []
 
 
 myThreads = []

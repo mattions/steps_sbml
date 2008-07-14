@@ -73,7 +73,7 @@ class Iteration(threading.Thread):
                 for inp in inputList:
                      mol = inp.getMol()
                      q = inp.getQuantity()
-                     print "Input applied: Mol %s, Quantity %e, time %d" %(mol, q, t) 
+#                     print "Input applied: Mol %s, Quantity %e, time %d" %(mol, q, t) 
                      self.sim.setCompCount('comp', mol, 
                                       self.sim.getCompCount('comp', mol) + q)
             i = 0 

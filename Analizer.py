@@ -68,7 +68,7 @@ p.plotMols(['Ca'],  resMean)
 p.plotMolIt('D', resList)
 
 p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
-p.plotMolsTogheter(['D','Ca', 'cAMP', 'PKA'], resMean, species)
+p.plotMolsTogheter(['cAMP', 'Ca', 'PKA','D'], resMean, species)
 if not batch:
     show()
     
