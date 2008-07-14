@@ -66,10 +66,14 @@ resMean = p.calcMean(resList)
 
 p.plotMols(['Ca'],  resMean)
 p.plotMolIt('D', resList)
+
 p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
+p.plotMolsTogheter(['D','Ca', 'cAMP', 'PKA'], resMean, species)
 if not batch:
     show()
-
+    
+#D75list = p.createListD('75', species)
+#resSum = p.calcDsumArray(D75list, resMean)
 #saveFig('Calcium.png', dir)
 
 #for specie in legendDict:

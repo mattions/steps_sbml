@@ -1,6 +1,7 @@
 from pylab import *
 import numpy
 import os
+import re
 
 
 class Plotter(object):
@@ -17,7 +18,26 @@ class Plotter(object):
                                     'D34_137', 'CDK5', 'PP2A', 'PP2C']
         self.__vol = vol
 
+    def createListD(self, molName, species):
+        list = []
+
+        p = re.compile('\w*' + molName + '\w*')
+        for specie in species:
+            m = p.match(specie)
+            if m:
+                list.append(m.group())
+        return list
     
+    def calcSumArray(self, arraylist, res):
+
+       
+        resSum = numpy.zeros(self.__tpnt.shape)
+        for item in arraylist:
+            molIndex = self.__legendDict[item]
+            resSum += res[:,molIndex]
+        return resSum
+        
+        
     def plotMols(self, mols, res, conc = False):
         """
         Plot the number of all the molecules provided as list on the same graph. 
@@ -44,7 +64,66 @@ class Plotter(object):
         xlabel('Time (sec)')
         title(mols)
         self.saveFig(str(mols) + ".png")
+        
+    def createSimilarDict(self, species):
+        
+        dict = {}
+        molTogroup = ['34','75','137']
+        for mol in molTogroup:
+            p = re.compile('\w*' + mol + '\w*')
+            list = []
+            for specie in species:
+                m = p.match(specie)
+                if m:
+                    list.append(m.group())
+            dict[mol] =list
+        return dict
 
+    def plotMolsTogheter(self, mols, res, species, conc = False):
+        """
+        Plot the number of all the molecules provided as list on the same graph. 
+        
+        :Parameters:
+            mols
+                The list of molecules
+            res
+                The array woth the concentration of each molecules
+            conc
+                If true the conc of the molecule will be plotted (default: False)
+            batch
+                It will save the graph to a directory instead of showing. (default: False)
+        """
+        figure()
+        
+        molToGroup = self.createSimilarDict(species)
+        for mol in mols:
+              self.plotRoutine(res[:,self.__legendDict[mol]], conc)
+              
+        resMol = self.calcSumArray(molToGroup['34'], res)
+        self.plotRoutine(resMol, conc)
+
+        resMol = self.calcSumArray(molToGroup['75'], res)
+        self.plotRoutine(resMol, conc)
+
+        resMol = self.calcSumArray(molToGroup['137'], res)
+        self.plotRoutine(resMol, conc)
+        
+        mols.append('D34')
+        mols.append('D75')
+        mols.append('D137')  
+        
+        legend(mols)
+        xlabel('Time (sec)')
+        title(mols)
+        self.saveFig(str(mols) + ".png")
+
+    def plotRoutine(self, res, conc):
+       if conc is True:
+           plot(self.__tpnt, self.calcConc(res))
+           ylabel('#concentrations')
+       else:
+           plot(self.__tpnt, res)
+           ylabel('#molecules')
         
     def plotMolIt(self, mol, resList, conc = False):
         """
