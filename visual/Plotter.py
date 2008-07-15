@@ -79,7 +79,7 @@ class Plotter(object):
             dict[mol] =list
         return dict
 
-    def plotMolsTogheter(self, mols, res, species, conc = False):
+    def plotMolsTogether(self, mols, res, species, conc = False):
         """
         Plot the number of all the molecules provided as list on the same graph. 
         
