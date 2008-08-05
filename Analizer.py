@@ -87,7 +87,8 @@ p.plotMols(['Ca'],  resMean)
 p.plotMolIt('D', resList)
 
 #p.plotMols(['D','D34','D75','D137','Ca', 'cAMP', 'PKA'], resMean)
-p.plotMolsTogether(['cAMP', 'Ca', 'PKA','D'], resMean, species)
+p.plotMolsTogether(['cAMP', 'Ca','D'], resMean, species)
+p.plotMolsTogether(['cAMP', 'Ca','D'], resMean, species, conc=True)
 if not batch:
     show()
     
