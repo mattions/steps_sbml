@@ -134,7 +134,10 @@ class Plotter(object):
         legend(mols)
         xlabel('Time (sec)')
         title(mols)
-        self.saveFig(str(mols) + ".png")
+        if conc:
+         self.saveFig(str(mols) + "_conc.png")
+        else:
+         self.saveFig(str(mols) + "_mol.png")
 
     def plotRoutine(self, res, conc):
        if conc is True:
