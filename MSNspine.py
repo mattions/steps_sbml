@@ -144,7 +144,7 @@ simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, inte
 #input5 = c.Input(450001, 'Ca', 2300)
 
 inputCa = []
-secOfInput = 450
+secOfInput = 150
 #duration = 2
 for i in xrange(10):    
 
@@ -159,7 +159,7 @@ for i in xrange(10):
     secOfInput += delay
 
 
-input6 = c.Input(400 * simMan.timePointIncrement , 'cAMP', 3975)
+input6 = c.Input(100 * simMan.timePointIncrement , 'cAMP', 3975)
 
 #inputs = [] # Steady State
 #inputs = [input1, input2, input3, input4, input5]
