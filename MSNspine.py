@@ -18,7 +18,6 @@
 """
 
 from libsbml import *
-import cPickle
 import sys
 import io
 import control as c
@@ -122,9 +121,6 @@ import steps.rng as srng
 r = srng.create('mt19937', 512)
 r.initialize(23412)
 
-import steps.wmdirect as swmdirect
-
-
 
 ######
 # Wrapping the sim object in the number of iteration
@@ -136,15 +132,8 @@ currentDir = io.loader.createDir()
 interval = 50 #(Time of updating)
 simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval)
 
-
-#input1 = c.Input(490001, 'Ca', 2300)
-#input2 = c.Input(480001, 'Ca', 2300)
-#input3 = c.Input(470001, 'Ca', 2300)
-#input4 = c.Input(460001, 'Ca', 2300)
-#input5 = c.Input(450001, 'Ca', 2300)
-
 inputCa = []
-secOfInput = 450
+secOfInput = 150
 #duration = 2
 for i in xrange(10):    
 
@@ -152,31 +141,47 @@ for i in xrange(10):
 #    for j in xrange(duration):
     inputTime = secOfInput * simMan.timePointIncrement
     input = c.Input(inputTime, 'Ca', 2300)
-    print "Input in at sec %f with dt time point %f" %(secOfInput, 
-                                                            simMan.dt)
+    #print "Input in at sec %f with dt time point %f" %(secOfInput, simMan.dt)
     inputCa.append(input)
 #    secOfInput += duration + delay
     secOfInput += delay
 
 
-input6 = c.Input(400 * simMan.timePointIncrement , 'cAMP', 3975)
+input6 = c.Input(100 * simMan.timePointIncrement , 'cAMP', 3975)
 
 #inputs = [] # Steady State
 #inputs = [input1, input2, input3, input4, input5]
 #inputs = [input1, input2, input3, input4, input5, input6]
 inputs = [input6]
 inputs.extend(inputCa)
-#inputs = []
-
+#inputs = [] #Decomment for base line
 
 myThreads = []
 # We need to create a sim object for each iteration
-for it in xrange (iterations):
-    
+
+
+
+stochastic = False
+integrationDT = 1.0e-4
+
+if stochastic :
+    # Normal STEPS engine. Stochastic
+
+    import steps.wmdirect as swmdirect
     sim = swmdirect.Solver(mdl, mesh, r)
-    iter = simMan.inputsIn(sim, inputs, it)
-    myThreads.append(iter)
-    iter.start()
+
+
+else:
+    # Deterministic
+    import steps.wmrk4 as swmrk4
+    sim = swmrk4.Solver(mdl, mesh, r)
+    sim.setDT(integrationDT) # Setting the dt
+    iterations = 1 # Only one iteration.
+    
+    for it in xrange (iterations):
+        iter = simMan.inputsIn(sim, inputs, it)
+        myThreads.append(iter)
+        iter.start()
     
 for t in myThreads:
     t.join()
@@ -188,9 +193,18 @@ io.loader.saveStorage(currentDir, storage)
 ### Write some interesting value for the simulation
 
 fInfo = open(currentDir + "/info.txt", 'w')
-fInfo.write('Simulation:\n nSec: %d\
-    \n dt: %f\
+type = ""
+
+fInfo.write('Simulation:\n\ Sec: %d\
+    \n resolution dt: %f\
     \n iterations: %d\n'  %(nSec, simMan.dt, iterations))
+
+if stochastic:
+    fInfo.write('type = stochastic\n')
+else:
+    fInfo.write('type = deterministic \n\
+    integration dt: %f\n' %integrationDT)
+   
 for inp in inputs:
     inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint() 
                                                       / simMan.timePointIncrement, 
