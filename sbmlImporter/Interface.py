@@ -130,13 +130,12 @@ class Interface(object):
             kLaw = listOfReactions[i].getKineticLaw()
             
             ## Getting the math
-            math = kLaw.getMath()
-            numc = math.getNumChildren()
-            print numc
-            if (numc > 1):
-                child = math.getLeftChild()
-                if (child.isOperator() == False) and (child.isNumber() == False):
-                   print child.getName()
+#            math = kLaw.getMath()
+#            numc = math.getNumChildren()
+#            if (numc > 1):
+#                child = math.getLeftChild()
+#                if (child.isOperator() == False) and (child.isNumber() == False):
+#                   print child.getName()
 
 #                i = 1
 #                for i in xrange(numc -1):
