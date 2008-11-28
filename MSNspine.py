@@ -166,19 +166,17 @@ integrationDT = 1.0e-4
 
 if stochastic :
     # Normal STEPS engine. Stochastic
-
-    import steps.wmdirect as swmdirect
-    sim = swmdirect.Solver(mdl, mesh, r)
-
-
+    import steps.wmdirect as swmEngine
+    
 else:
     # Deterministic
-    import steps.wmrk4 as swmrk4
-    sim = swmrk4.Solver(mdl, mesh, r)
-    sim.setDT(integrationDT) # Setting the dt
+    import steps.wmrk4 as swEngine
     iterations = 1 # Only one iteration.
     
 for it in xrange (iterations):
+    sim = swmEngine.Solver(mdl, mesh, r)
+    if not stochastic :
+        sim.setDT(integrationDT) # Setting the dt
     iter = simMan.inputsIn(sim, inputs, it)
     myThreads.append(iter)
     iter.start()
