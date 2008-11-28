@@ -28,19 +28,30 @@ import steps.geom.wm as swm
 #####
 # Usage script to run one simulation
 def usage():
-    print "Give me three args: the number of sec to simulate and the dt" 
+    print "python MSNspine.py 800 -3 sto"
+    print "python MSNspine.py 800 -3 det 1e-4"
+    print "Two possible simulation are available: deterministic or stochastic.\
+    \n- First argument is the number of the seconds you want to simulate\
+    \n- Second argument is the resolution of the the points.\
+    \n- Third argument is the type of simulation. det for deterministic, sto for stochastic.\
+    \n- Fourth argument is the integration dt for the deterministic simulation.\
+    Is not needed in the case of stochastic one." 
 
 
 #####
 # Grabbing the argument
 
-if (len(sys.argv) != 3): # Two arguments + the name of the script
+if (sys.argv[3] is "det" and len(sys.argv) != 5 ): # Two arguments + the name of the script
     print usage()
     exit() # For ipython
     sys.exit()
 
 nSec = int(sys.argv[1]) #sec
-dt_exp = int(sys.argv[2]) 
+dt_exp = int(sys.argv[2]) # Resolution point
+typeOfSimulation = sys.argv[3]
+
+if len(sys.argv) == 5: # Only if deterministic
+    deterministicIntegrationDT = int(sys.argv[4])
 
 #############
 # STEP Setup
@@ -162,23 +173,32 @@ myThreads = []
 
 
 stochastic = False
-integrationDT = 1.0e-4
+integrationDT = 1.0e-5
+print typeOfSimulation == 'sto', typeOfSimulation, type(typeOfSimulation)
 
-if stochastic :
+if typeOfSimulation == 'sto' :
     # Normal STEPS engine. Stochastic
 
     import steps.wmdirect as swmdirect
     sim = swmdirect.Solver(mdl, mesh, r)
+    print "Stochastic simulation choosen"
 
-
-else:
+elif typeOfSimulation == 'det':
     # Deterministic
     import steps.wmrk4 as swmrk4
     sim = swmrk4.Solver(mdl, mesh, r)
-    sim.setDT(integrationDT) # Setting the dt
+    sim.setDT(deterministicIntegrationDT) # Setting the dt
     iterations = 1 # Only one iteration.
+    print "Deterministic simulation choosen"
+
+else:
+    print "\nError - Type of simulation not Understood. Exit.\n"
+    usage()
+    exit() # For ipython
+    sys.exit()
     
-    for it in xrange (iterations):
+# Creating the threads    
+for it in xrange (iterations):
         iter = simMan.inputsIn(sim, inputs, it)
         myThreads.append(iter)
         iter.start()
