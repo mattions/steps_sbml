@@ -69,9 +69,12 @@ class Iteration(threading.Thread):
             t 
                 The timepoint
         """
+        instantSec = t / self.timePointIncrement
         if (t % (self.interval * self.timePointIncrement) == 0):
-            instantSec = t / self.timePointIncrement
+            
             print "iteration %s sec %f" %(self.resName, instantSec)
+##        else:
+##            print "iteration %s sec %f" %(self.resName, instantSec)
     
     def runTime(self, inputToApply):
         """
@@ -102,6 +105,8 @@ class Iteration(threading.Thread):
                 i = i + 1
             self.sim.run(self.tpnt[t])
             self.instantSec(t)
+            #print t, self.tStart, self.tStop
+
         return res
     
     def run (self):
