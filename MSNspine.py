@@ -41,17 +41,19 @@ def usage():
 #####
 # Grabbing the argument
 
-if (sys.argv[3] is "det" and len(sys.argv) != 5 ): # Two arguments + the name of the script
+if len(sys.argv) == 5: # Only if deterministic
+    deterministicIntegrationDT = int(sys.argv[4])
+    
+elif len(sys.argv) != 4: # If it's not 4 it's WRONG so we exit
     print usage()
     exit() # For ipython
     sys.exit()
 
 nSec = int(sys.argv[1]) #sec
 dt_exp = int(sys.argv[2]) # Resolution point
-typeOfSimulation = sys.argv[3]
+typeOfSimulation = sys.argv[3] #type
 
-if len(sys.argv) == 5: # Only if deterministic
-    deterministicIntegrationDT = int(sys.argv[4])
+
 
 #############
 # STEP Setup
@@ -170,65 +172,32 @@ inputs.extend(inputCa)
 myThreads = []
 # We need to create a sim object for each iteration
 
-
-
-<<<<<<< TREE
-stochastic = False
 integrationDT = 1.0e-5
 print typeOfSimulation == 'sto', typeOfSimulation, type(typeOfSimulation)
-=======
-stochastic = True
-integrationDT = 1.0e-4
->>>>>>> MERGE-SOURCE
 
 if typeOfSimulation == 'sto' :
     # Normal STEPS engine. Stochastic
-<<<<<<< TREE
-
-    import steps.wmdirect as swmdirect
-    sim = swmdirect.Solver(mdl, mesh, r)
-    print "Stochastic simulation choosen"
-
-elif typeOfSimulation == 'det':
-=======
     import steps.wmdirect as swmEngine
     
-else:
->>>>>>> MERGE-SOURCE
+elif typeOfSimulation == 'det' :
     # Deterministic
-<<<<<<< TREE
-    import steps.wmrk4 as swmrk4
-    sim = swmrk4.Solver(mdl, mesh, r)
-    sim.setDT(deterministicIntegrationDT) # Setting the dt
-=======
-    import steps.wmrk4 as swEngine
->>>>>>> MERGE-SOURCE
+    import steps.wmrk4 as swmEngine
     iterations = 1 # Only one iteration.
-    print "Deterministic simulation choosen"
 
 else:
     print "\nError - Type of simulation not Understood. Exit.\n"
     usage()
     exit() # For ipython
     sys.exit()
-    
-<<<<<<< TREE
-# Creating the threads    
-=======
->>>>>>> MERGE-SOURCE
+
+# Creating the threads        
 for it in xrange (iterations):
-<<<<<<< TREE
-        iter = simMan.inputsIn(sim, inputs, it)
-        myThreads.append(iter)
-        iter.start()
-=======
     sim = swmEngine.Solver(mdl, mesh, r)
-    if not stochastic :
+    if typeOfSimulation == 'det' :
         sim.setDT(integrationDT) # Setting the dt
     iter = simMan.inputsIn(sim, inputs, it)
     myThreads.append(iter)
     iter.start()
->>>>>>> MERGE-SOURCE
     
 for t in myThreads:
     t.join()
@@ -246,9 +215,9 @@ fInfo.write('Simulation:\n\ Sec: %d\
     \n resolution dt: %f\
     \n iterations: %d\n'  %(nSec, simMan.dt, iterations))
 
-if stochastic:
+if typeOfSimulation == 'sto':
     fInfo.write('type = stochastic\n')
-else:
+elif typeOfSimulation == 'det':
     fInfo.write('type = deterministic \n\
     integration dt: %f\n' %integrationDT)
    
