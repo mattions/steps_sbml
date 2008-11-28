@@ -189,7 +189,7 @@ class Plotter(object):
             
         pathFig = "%s/%s" %(plotDir, figName)
         if (not os.path.exists(pathFig)):
-            savefig(pathFig, dpi='300')
+            savefig(pathFig, dpi=300)
             print "Figure saved in %s" %(pathFig)
         
     def calcMean(self, resList):

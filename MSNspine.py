@@ -172,22 +172,37 @@ myThreads = []
 
 
 
+<<<<<<< TREE
 stochastic = False
 integrationDT = 1.0e-5
 print typeOfSimulation == 'sto', typeOfSimulation, type(typeOfSimulation)
+=======
+stochastic = True
+integrationDT = 1.0e-4
+>>>>>>> MERGE-SOURCE
 
 if typeOfSimulation == 'sto' :
     # Normal STEPS engine. Stochastic
+<<<<<<< TREE
 
     import steps.wmdirect as swmdirect
     sim = swmdirect.Solver(mdl, mesh, r)
     print "Stochastic simulation choosen"
 
 elif typeOfSimulation == 'det':
+=======
+    import steps.wmdirect as swmEngine
+    
+else:
+>>>>>>> MERGE-SOURCE
     # Deterministic
+<<<<<<< TREE
     import steps.wmrk4 as swmrk4
     sim = swmrk4.Solver(mdl, mesh, r)
     sim.setDT(deterministicIntegrationDT) # Setting the dt
+=======
+    import steps.wmrk4 as swEngine
+>>>>>>> MERGE-SOURCE
     iterations = 1 # Only one iteration.
     print "Deterministic simulation choosen"
 
@@ -197,11 +212,23 @@ else:
     exit() # For ipython
     sys.exit()
     
+<<<<<<< TREE
 # Creating the threads    
+=======
+>>>>>>> MERGE-SOURCE
 for it in xrange (iterations):
+<<<<<<< TREE
         iter = simMan.inputsIn(sim, inputs, it)
         myThreads.append(iter)
         iter.start()
+=======
+    sim = swmEngine.Solver(mdl, mesh, r)
+    if not stochastic :
+        sim.setDT(integrationDT) # Setting the dt
+    iter = simMan.inputsIn(sim, inputs, it)
+    myThreads.append(iter)
+    iter.start()
+>>>>>>> MERGE-SOURCE
     
 for t in myThreads:
     t.join()
