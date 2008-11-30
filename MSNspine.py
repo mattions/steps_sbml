@@ -28,7 +28,8 @@ import steps.geom.wm as swm
 #####
 # Usage script to run one simulation
 def usage():
-    print "python MSNspine.py 800 -3 sto"
+ 
+    print "\npython MSNspine.py 800 -3 sto"
     print "python MSNspine.py 800 -3 det 1e-4"
     print "Two possible simulation are available: deterministic or stochastic.\
     \n- First argument is the number of the seconds you want to simulate\
@@ -42,7 +43,7 @@ def usage():
 # Grabbing the argument
 
 if len(sys.argv) == 5: # Only if deterministic
-    deterministicIntegrationDT = int(sys.argv[4])
+    deterministicIntegrationDT = float(sys.argv[4])
     
 elif len(sys.argv) != 4: # If it's not 4 it's WRONG so we exit
     print usage()
@@ -169,12 +170,9 @@ inputs = [input6]
 inputs.extend(inputCa)
 #inputs = [] #Decomment for base line
 
-myThreads = []
 # We need to create a sim object for each iteration
-
-integrationDT = 1.0e-5
-print typeOfSimulation == 'sto', typeOfSimulation, type(typeOfSimulation)
-
+# So we import the eingine with the same name and we create an
+# instance each iteration
 if typeOfSimulation == 'sto' :
     # Normal STEPS engine. Stochastic
     import steps.wmdirect as swmEngine
@@ -191,8 +189,9 @@ else:
     sys.exit()
 
 # Creating the threads        
+myThreads = []
 for it in xrange (iterations):
-    sim = swmEngine.Solver(mdl, mesh, r)
+    sim = swmEngine.Solver(mdl, mesh, r) #Create the sim
     if typeOfSimulation == 'det' :
         sim.setDT(integrationDT) # Setting the dt
     iter = simMan.inputsIn(sim, inputs, it)
