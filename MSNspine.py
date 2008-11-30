@@ -193,7 +193,7 @@ myThreads = []
 for it in xrange (iterations):
     sim = swmEngine.Solver(mdl, mesh, r) #Create the sim
     if typeOfSimulation == 'det' :
-        sim.setDT(integrationDT) # Setting the dt
+        sim.setDT(deterministicIntegrationDT) # Setting the dt
     iter = simMan.inputsIn(sim, inputs, it)
     myThreads.append(iter)
     iter.start()
