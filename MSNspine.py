@@ -54,7 +54,8 @@ nSec = int(sys.argv[1]) #sec
 dt_exp = int(sys.argv[2]) # Resolution point
 typeOfSimulation = sys.argv[3] #type
 
-
+print "Simulation started with the following aguments:"
+print sys.argv
 
 #############
 # STEP Setup
@@ -210,9 +211,9 @@ io.loader.saveStorage(currentDir, storage)
 fInfo = open(currentDir + "/info.txt", 'w')
 type = ""
 
-fInfo.write('Simulation:\n\ Sec: %d\
-    \n resolution dt: %f\
-    \n iterations: %d\n'  %(nSec, simMan.dt, iterations))
+fInfo.write('Simulation:\nSec: %d\
+    \nresolution dt: %f\
+    \niterations: %d\n'  %(nSec, simMan.dt, iterations))
 
 if typeOfSimulation == 'sto':
     fInfo.write('type = stochastic\n')
