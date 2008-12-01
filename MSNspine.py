@@ -218,7 +218,7 @@ if typeOfSimulation == 'sto':
     fInfo.write('type = stochastic\n')
 elif typeOfSimulation == 'det':
     fInfo.write('type = deterministic \n\
-    integration dt: %f\n' %integrationDT)
+    integration dt: %f\n' %deterministicIntegrationDT)
    
 for inp in inputs:
     inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint() 
