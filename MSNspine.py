@@ -144,15 +144,15 @@ currentDir = io.loader.createDir()
 
 
 
-iterations = 2
+iterations = 5
 simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval = 50)
 
 ## Experiments
 experiment = c.Experiment(simMan)
 #inputs = experiment.baseline() #Decomment for base line
 #inputs = experiment.rig1() # Fenandez Simulation
-
-inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
+#inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
+inputs = experiment.rig3() # DA increasing the effect of the Glu Fast train of GLu
 
 ######
 # Wrapping the sim object in the number of iteration

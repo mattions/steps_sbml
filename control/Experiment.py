@@ -115,3 +115,17 @@ class Experiment(object):
         inputs = self._orderInput(inputs)
         return inputs
     
+    def rig3(self):
+        """
+        Simulate the effect of a dopamine reward release just after a trains 
+        of Glutamate release. The train of Glutamate is really fast (one spike every 4 ms)
+        """
+        inputs = []
+        inputcAMP = Input(120 * self.simMan.timePointIncrement , 'cAMP', 3975)
+        inputCa = self._createCalciumTrain(numSpikes = 10, secOfInput = 100, delay = 0.004, 
+                                           quantity = 2300)
+        inputs = [inputcAMP]
+        inputs.extend(inputCa)
+        inputs = self._orderInput(inputs)
+        return inputs
+    
