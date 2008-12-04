@@ -1,3 +1,6 @@
+
+# -*- coding: utf-8 -*-
+
 """
  * Copyright (C) 2008 Jul - Michele Mattioni:
  *
@@ -136,40 +139,25 @@ import steps.rng as srng
 r = srng.create('mt19937', 512)
 r.initialize(23412)
 
+# Directory where to store the simulation
+currentDir = io.loader.createDir()
+
+
+
+iterations = 2
+simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval = 50)
+
+## Experiments
+experiment = c.Experiment(simMan)
+#inputs = experiment.baseline() #Decomment for base line
+#inputs = experiment.rig1() # Fenandez Simulation
+
+inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
 
 ######
 # Wrapping the sim object in the number of iteration
 
-iterations = 2
 
-# Directory where to store the simulation
-currentDir = io.loader.createDir()
-interval = 50 #(Time of updating)
-simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval)
-
-inputCa = []
-secOfInput = 150
-#duration = 2
-for i in xrange(10):    
-
-    delay = 4
-#    for j in xrange(duration):
-    inputTime = secOfInput * simMan.timePointIncrement
-    input = c.Input(inputTime, 'Ca', 2300)
-    #print "Input in at sec %f with dt time point %f" %(secOfInput, simMan.dt)
-    inputCa.append(input)
-#    secOfInput += duration + delay
-    secOfInput += delay
-
-
-input6 = c.Input(100 * simMan.timePointIncrement , 'cAMP', 3975)
-
-#inputs = [] # Steady State
-#inputs = [input1, input2, input3, input4, input5]
-#inputs = [input1, input2, input3, input4, input5, input6]
-inputs = [input6]
-inputs.extend(inputCa)
-#inputs = [] #Decomment for base line
 
 # We need to create a sim object for each iteration
 # So we import the eingine with the same name and we create an
@@ -221,11 +209,16 @@ elif typeOfSimulation == 'det':
     fInfo.write('type = deterministic \n\
     integration dt: %f\n' %deterministicIntegrationDT)
    
-for inp in inputs:
-    inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint() 
-                                                      / simMan.timePointIncrement, 
-                                                      inp.getMol(),
-                                                      inp.getQuantity())
+# Sort the time.
+tInputs = inputs.keys()
+tInputs.sort()   
+
+for t in tInputs:
+    for inp in inputs[t]:
+        inputInfo = "time: %d\tmol: %s\tquantity:%d\n" % (inp.getInputTimePoint() 
+                                                          / simMan.timePointIncrement, 
+                                                          inp.getMol(),
+                                                          inp.getQuantity())
     fInfo.write(inputInfo)
 fInfo.close()
 

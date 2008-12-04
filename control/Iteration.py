@@ -40,27 +40,6 @@ class Iteration(threading.Thread):
         self.interval = interval
         threading.Thread.__init__ ( self )
 
-    def orderInput(self, inputs):
-        """
-        Order the input to apply according to the sec of input.
-        Return a dictionay of ordered input of the structure:
-        timepoint --> list of input to apply in that inputTime
-        :Parameters:
-            inputs
-                List of Input 
-        """
-                # Ordering the input
-        inputToApply = {}
-        
-        for input in (inputs):
-            timePoint = input.getInputTimePoint()
-            if (timePoint in inputToApply):
-                list = inputToApply[timePoint] # Grabbing all the present Inputs
-                list.append(input) # adding the inputs
-                inputToApply[timePoint] = list # Update
-            else:
-                inputToApply[timePoint] = [input]        
-        return inputToApply
     
     def instantSec(self, t):
         """
@@ -117,10 +96,7 @@ class Iteration(threading.Thread):
         for specie in self.species:
             self.sim.setCompConc('comp', specie, self.species[specie])
         
-        # Ordering the input
-        inputToApply = self.orderInput(self.inputs)
-        
-        res = self.runTime(inputToApply)
+        res = self.runTime(self.inputs)
         
         #Save the result
         io.loader.saveRes(self.currentDir, res, self.resName)

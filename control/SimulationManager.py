@@ -33,7 +33,16 @@ class SimulationManager(object):
 
 	
 	def __init__(self, nSec, dt_exp, species, iterations, currentDir, interval):
-			
+		"""
+			Constructor for the Simulation Manager
+			:Parameters
+				nSec: Number of Seconds to simulate
+				dt_exp:	Exponential used to store the data to the array
+				species: Species in the simulation
+				iterations: number of iterations the simulation should be run
+				currentDir: Directory where the Simulation will be saved
+				interval: Interval of sec between the log
+		"""	
 		self.nSec = nSec
 		self.dt = pow(10, dt_exp)
 		self.dt_exp = dt_exp
@@ -61,7 +70,7 @@ class SimulationManager(object):
 	
 	def inputsIn(self, sim, inputs, it):
 		"""
-		Simulate creating one iteration thread for the number of the iteration
+		Create an iteration thread
 		:params:
 			sim 
 				The simulation object of STEPS
