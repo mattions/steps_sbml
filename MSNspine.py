@@ -206,7 +206,7 @@ fInfo.write('Simulation:\nSec: %d\
 if typeOfSimulation == 'sto':
     fInfo.write('type = stochastic\n')
 elif typeOfSimulation == 'det':
-    fInfo.write('type = deterministic \n\
+    fInfo.write('type = deterministic\n\
     integration dt: %f\n' %deterministicIntegrationDT)
    
 # Sort the time.

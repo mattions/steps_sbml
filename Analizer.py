@@ -47,8 +47,13 @@ else:
 ## Setting the backend
 import matplotlib
 if batch:
-    matplotlib.use('Cairo')
-    print "Switching backend to Cairo. Batch execution"
+    try:
+        import cairo
+        matplotlib.use('Cairo')
+        print "Switching backend to Cairo. Batch execution"
+    except:
+        matplotlib.use('Agg')
+        print "Switching backend to Agg. Batch execution"
 from pylab import *
 
 import visual
