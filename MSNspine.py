@@ -247,4 +247,4 @@ if os.path.getsize(errorFile.name) == 0:
     print "Simulation Ended. Path to Simulation Files %s" %simMan.currentDir
     print "Cookies ready." 
 else:
-    print "Error Happened! - check the error File: %s" %errorFile
+    print "Error Happened! - check the error File: %s" %errorFile.name
