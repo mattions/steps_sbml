@@ -22,6 +22,7 @@
 
 from libsbml import *
 import sys
+import os
 import io
 import control as c
 import sbmlImporter
@@ -56,6 +57,22 @@ elif len(sys.argv) != 4: # If it's not 4 it's WRONG so we exit
 nSec = int(sys.argv[1]) #sec
 dt_exp = int(sys.argv[2]) # Resolution point
 typeOfSimulation = sys.argv[3] #type
+
+#===========
+# Log and error Setting the log and the error file 
+# Directory where to store the simulation
+#============
+currentDir = io.loader.createDir()
+print "Simulation results will be stored in : %s" %currentDir
+
+saveOut = sys.stdout
+saveErr = sys.stderr
+
+logFile = open(os.path.join(currentDir,'log.txt'), 'w')
+errorFile = open(os.path.join(currentDir,'error.txt'), 'w')
+sys.stdout = logFile
+sys.stderr = errorFile
+
 
 print "Simulation started with the following aguments:"
 print sys.argv
@@ -139,12 +156,7 @@ import steps.rng as srng
 r = srng.create('mt19937', 512)
 r.initialize(23412)
 
-# Directory where to store the simulation
-currentDir = io.loader.createDir()
-
-
-
-iterations = 5
+iterations = 2
 simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval = 50)
 
 ## Experiments
@@ -196,7 +208,7 @@ io.loader.saveStorage(currentDir, storage)
 #io.loader.saveCommon(currentDir, simMan.tpnt, simMan.legendDict, species, iterations)
 ### Write some interesting value for the simulation
 
-fInfo = open(currentDir + "/info.txt", 'w')
+fInfo = open(os.path.join(currentDir, "info.txt"), 'w')
 type = ""
 
 fInfo.write('Simulation:\nSec: %d\
@@ -222,5 +234,17 @@ for t in tInputs:
     fInfo.write(inputInfo)
 fInfo.close()
 
-print "Simulation Ended. Path to Simulation Files %s" %simMan.currentDir
-print "Cookies ready."
+# Close the files
+logFile.close()
+errorFile.close()
+
+sys.stdout = saveOut # Restoring the printing on the console
+sys.stderr = saveErr # Restoring the error on the console
+
+# Deleting the error file if no error present
+if os.path.getsize(errorFile.name) == 0:
+    os.remove(errorFile.name)
+    print "Simulation Ended. Path to Simulation Files %s" %simMan.currentDir
+    print "Cookies ready." 
+else:
+    print "Error Happened! - check the error File: %s" %errorFile
