@@ -156,24 +156,14 @@ import steps.rng as srng
 r = srng.create('mt19937', 512)
 r.initialize(23412)
 
-iterations = 2
+iterations = 4
 simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, interval = 50)
 
-## Experiments
-experiment = c.Experiment(simMan)
-#inputs = experiment.baseline() #Decomment for base line
-#inputs = experiment.rig1() # Fenandez Simulation
-#inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
-inputs = experiment.rig3() # DA increasing the effect of the Glu Fast train of GLu
-
-######
-# Wrapping the sim object in the number of iteration
-
-
-
+#==============================
 # We need to create a sim object for each iteration
 # So we import the eingine with the same name and we create an
 # instance each iteration
+
 if typeOfSimulation == 'sto' :
     # Normal STEPS engine. Stochastic
     import steps.wmdirect as swmEngine
@@ -191,10 +181,22 @@ else:
 
 # Creating the threads        
 myThreads = []
+## Experiments
+experiment = c.Experiment(simMan) # General controller for the experiment
+
 for it in xrange (iterations):
     sim = swmEngine.Solver(mdl, mesh, r) #Create the sim
     if typeOfSimulation == 'det' :
         sim.setDT(deterministicIntegrationDT) # Setting the dt
+        
+    #==========
+    # We must create a list of inputs for each simulation.
+        
+    #inputs = experiment.baseline() #Decomment for base line
+    #inputs = experiment.rig1() # Fenandez Simulation
+    inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
+    #inputs = experiment.rig3() # DA increasing the effect of the Glu Fast train of Glu
+    
     iter = simMan.inputsIn(sim, inputs, it)
     myThreads.append(iter)
     iter.start()

@@ -70,6 +70,7 @@ def loadRes(dir, iterations):
             print "loaded file %s/%s" %(dir, resName)
         except:
             print "Impossible to load file %s/%s\t Skipped." %(dir, resName)
+    print "Iteration loaded succesfully %d" % len (results)
     return results
 
 def saveRes(dir, res, resName):

@@ -76,8 +76,7 @@ class SimulationManager(object):
 				The simulation object of STEPS
 			inputs
 				List of Inputs to give during the simulation
-		"""
-			
+		"""			
 		iter = Iteration(sim, 0, self.nTPoints, inputs, self.species, self.tpnt, self.nTPoints,
 				  self.legendDict, self.dt_exp, self.currentDir, it, self.interval)
 		return iter
