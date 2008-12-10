@@ -183,6 +183,7 @@ else:
 myThreads = []
 ## Experiments
 experiment = c.Experiment(simMan) # General controller for the experiment
+inputs = [] #Inputs. Var used for printing the inputs
 
 for it in xrange (iterations):
     sim = swmEngine.Solver(mdl, mesh, r) #Create the sim
@@ -194,8 +195,10 @@ for it in xrange (iterations):
         
     #inputs = experiment.baseline() #Decomment for base line
     #inputs = experiment.rig1() # Fenandez Simulation
-    inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
+    #inputs = experiment.rig2() # DA increasing the effect of the Glu Schultz
     #inputs = experiment.rig3() # DA increasing the effect of the Glu Fast train of Glu
+    #inputs = experiment.rig4() # Simulate the release of cAMP only
+    inputs = experiment.rig5() # Release of a fast train of Calcium only.
     
     iter = simMan.inputsIn(sim, inputs, it)
     myThreads.append(iter)

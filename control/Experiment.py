@@ -129,3 +129,25 @@ class Experiment(object):
         inputs = self._orderInput(inputs)
         return inputs
     
+    def rig4(self):
+        """
+        Simulate the release of only cAMP
+        """
+        inputs = []
+        inputcAMP = Input(120 * self.simMan.timePointIncrement , 'cAMP', 3975)
+        inputs = [inputcAMP]
+        return inputs
+
+    def rig5(self):
+        """
+        Simulate the effect of a train Glutamte release. The train of Calcium is really fast 
+        (one spike every 4 ms)
+        """
+        inputs = []
+        
+        inputCa = self._createCalciumTrain(numSpikes = 10, secOfInput = 100, delay = 0.004, 
+                                           quantity = 2300)
+        inputs.extend(inputCa)
+        inputs = self._orderInput(inputs)
+        return inputs
+    
