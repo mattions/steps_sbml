@@ -1,0 +1,10 @@
+# Ignore the files for git
+
+# All the python compiled
+*.pyc
+*.png
+.project
+.pydevproject
+
+# The directory with the Sims
+Sims
