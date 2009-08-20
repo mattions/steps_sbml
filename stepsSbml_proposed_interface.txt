@@ -1,0 +1,44 @@
+Model: 
+
+import steps_0_5_0.sbml as ssbml
+
+
+mdl = ssbml.getModel('filename')
+
+mdl
+    Species
+    Reactions
+    
+    1 Set Species:
+
+            listOfSpecies = sbmlImporter.getSpecies()
+
+            spec_Obj = []
+            for specie in listOfSpecies:
+	            specie_obj = smod.Spec(specie, mdl) 
+	            spec_obj.append(specie_obj)
+
+    2. Reactions
+
+    
+Geom:
+    geom = ssbml.getGeom('filename.sbml')
+    1. Volume
+    
+Sim:
+    InitialCondition 
+    sim = sbmlImporter.createSim('sim_type', filename.sbml)
+    
+
+
+# From user point of view 
+# This is all what has to be done
+
+import sbmlImporter
+mdl = ssbml.getModel('filename')
+geom = ssbml.getGeom('filename.sbml')
+sim = sbmlImporter.createSim('sim_type', filename.sbml)
+
+# Simulation Option here
+
+
