@@ -27,7 +27,7 @@ import io
 import control as c
 import sbmlImporter
 import steps.model as smodel
-import steps.geom.wm as swm
+import steps.geom as swm
 
 #####
 # Usage script to run one simulation
