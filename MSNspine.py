@@ -164,31 +164,29 @@ simMan = c.SimulationManager(nSec, dt_exp, species, iterations, currentDir, inte
 # So we import the eingine with the same name and we create an
 # instance each iteration
 
-if typeOfSimulation == 'sto' :
-    # Normal STEPS engine. Stochastic
-    import steps.wmdirect as swmEngine
-    
-elif typeOfSimulation == 'det' :
-    # Deterministic
-    import steps.wmrk4 as swmEngine
-    iterations = 1 # Only one iteration.
-
-else:
-    print "\nError - Type of simulation not Understood. Exit.\n"
-    usage()
-    exit() # For ipython
-    sys.exit()
+import steps.solver as ssolver
 
 # Creating the threads        
 myThreads = []
 ## Experiments
 experiment = c.Experiment(simMan) # General controller for the experiment
 inputs = [] #Inputs. Var used for printing the inputs
+if typeOfSimulation == 'det' :
+    iterations = 1 # Only one iteration.
 
 for it in xrange (iterations):
-    sim = swmEngine.Solver(mdl, mesh, r) #Create the sim
-    if typeOfSimulation == 'det' :
+    if typeOfSimulation == 'sto' :
+        # Normal STEPS 
+        sim = ssolver.Wmdirect(mdl, mesh, r) #Create the sim
+    elif typeOfSimulation == 'det' :
+        # Deterministic
+        sim = ssolver.Wmrk4(mdl, mesh, r) #Create the sim
         sim.setDT(deterministicIntegrationDT) # Setting the dt
+    else:
+        print "\nError - Type of simulation not Understood. Exit.\n"
+        usage()
+        exit() # For ipython
+        sys.exit()
         
     #==========
     # We must create a list of inputs for each simulation.
