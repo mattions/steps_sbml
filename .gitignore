@@ -5,6 +5,7 @@
 *.png
 .project
 .pydevproject
+.settings
 
 # The directory with the Sims
 Sims
