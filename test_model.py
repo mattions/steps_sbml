@@ -14,6 +14,8 @@ import steps.solver as ssolver
 import sbmlImporter
 import numpy as np
 
+import matplotlib.pyplot as plt
+
 # Setting the kinetic simulation
 
 mdl = smodel.Model()
@@ -69,3 +71,7 @@ for it in range (0, NITER):
                 i = i + 1
 
 mean_res = np.mean(res_m, 0)
+
+for i in range(len(species)):
+    plt.plot(tpnt, mean_res[:,i])
+plt.show()

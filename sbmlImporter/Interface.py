@@ -66,11 +66,12 @@ class Interface(object):
         for specie in ListOfSpecies:
             conc = specie.getInitialConcentration()
             amount = specie.getInitialAmount()
-            if amount != amount: # This is checking the Not a Number trick
+            if amount == amount: # This is checking the Not a Number trick
                 species[specie.getId()] = amount
             else:
                 species[specie.getId()] = conc
             #print "initial concentration for %s: %d" %(specie.getId(), conc)
+        print species
         return species
     
     def setMols(self, smodel, mdl, species):
