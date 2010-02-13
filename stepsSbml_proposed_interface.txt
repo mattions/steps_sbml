@@ -35,7 +35,7 @@ Sim:
 # This is all what has to be done
 
 import sbmlImporter
-mdl = ssbml.getModel('filename')
+mdl = smodel.Model()
 geom = ssbml.getGeom('filename.sbml')
 sim = sbmlImporter.createSim('sim_type', filename.sbml)
 
