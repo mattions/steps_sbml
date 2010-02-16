@@ -64,11 +64,11 @@ class Interface(object):
         ListOfSpecies = self.__model.getListOfSpecies()
         species = {}
         for specie in ListOfSpecies:
-            conc = specie.getInitialConcentration()
-            amount = specie.getInitialAmount()
-            if amount == amount: # This is checking the Not a Number trick
+            if specie.isSetInitialAmount():
+                amount = specie.getInitialAmount()
                 species[specie.getId()] = amount
             else:
+                conc = specie.getInitialConcentration()
                 species[specie.getId()] = conc
             #print "initial concentration for %s: %d" %(specie.getId(), conc)
         print species
