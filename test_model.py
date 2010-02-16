@@ -1,9 +1,9 @@
 # Author Michele Mattioni
 # date Sat Feb 13 11:21:00 GMT 2010
 
-NITER = 2
+NITER = 1
 ENDTIME = 200
-DT = 0.001
+DT = 0.1
 POINTS = int(ENDTIME/DT)
 
 
@@ -61,14 +61,15 @@ sim = ssolver.Wmdirect(mdl, mesh, r)
 print "before simulation"
 for it in range (0, NITER):
     sim.reset()
-    iSbml.set_initial_conditions(sim, species)                       
+    iSbml.set_initial_conditions(sim, species)        
     for t in xrange(0,POINTS):
-        sim.run(tpnt[t])
         i = 0
         for specie in species:
-                res_m[it, t, i] = sim.getCompCount('comp', specie)
+                print "iteration: %s time: %s specie: %s quantity: %s" %(it, t, specie, sim.getCompCount('comp', specie))
+                res_m[it, t, i] = sim.getCompConc('comp', specie)
                 legendDict[specie] = i
                 i = i + 1
+        sim.run(tpnt[t])
 
 mean_res = np.mean(res_m, 0)
 

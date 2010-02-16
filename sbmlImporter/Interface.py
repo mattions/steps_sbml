@@ -208,6 +208,11 @@ class Interface(object):
         """Setting the initial conditions in the simulator getting the value from SBML
         sim: Simulator STEPS object
         """
-                # Setting the conc
+        # Setting the conc
+        
+        ###
+        # 1. Calculate the right concentration
+        # 2. Give it to STEPS
+        # PreRequesite: Solve the Unit convertion.
         for specie in species:
             sim.setCompConc('comp', specie, species[specie])
