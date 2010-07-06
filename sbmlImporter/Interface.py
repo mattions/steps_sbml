@@ -58,21 +58,24 @@ class Interface(object):
     
     def getSpecies(self):
         """
-            Return the dictionary with the species and their own concentration
+            Return two dictionaries:
+            - species in amount amount (if any)
+            - species in concentration (if any)
         """
         #getting the variuos species
         ListOfSpecies = self.__model.getListOfSpecies()
-        species = {}
+        species_conc = {}
+        species_amount = {}
         for specie in ListOfSpecies:
             if specie.isSetInitialAmount():
                 amount = specie.getInitialAmount()
-                species[specie.getId()] = amount
+                species_amount[specie.getId()] = amount
             else:
                 conc = specie.getInitialConcentration()
-                species[specie.getId()] = conc
+                species_conc[specie.getId()] = conc
             #print "initial concentration for %s: %d" %(specie.getId(), conc)
-        print species
-        return species
+        
+        return species_amount, species_conc
     
     def setMols(self, smodel, mdl, species):
         """
