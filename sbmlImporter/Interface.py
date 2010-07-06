@@ -88,9 +88,13 @@ class Interface(object):
                 The Species to add to the model
         """
         mols = {}
-        for specie in species:
+        for specie in species[0]:
             mol = smodel.Spec(specie, mdl)
             mols[specie] = mol 
+        for specie in species[1]:
+            mol = smodel.Spec(specie, mdl)
+            mols[specie] = mol  
+          
         return mols
             
             
