@@ -170,7 +170,7 @@ class Interface(object):
             print par.getId(), par.getValue()
         return globPar
     
-    def instantiate_reaction(self, smodel, volsys, reactions):
+    def instantiate_reaction(self, smodel, volsys, volComp, reactions):
         """Instantiate the reaction in STEPS"""
         print "reactions : %d " %len(reactions)
         for r in reactions:
